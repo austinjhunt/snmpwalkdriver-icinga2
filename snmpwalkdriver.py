@@ -25,6 +25,7 @@ def get_member_count(api_url):
         print(e)
         sys.exit(3)
 
+
 # Sample command call looks like:
 # snmpwalk -v VERSION -X PRIVPASS -A AUTHPASS -a AUTHPROTOCOL -x PRIVPROTOCOL -l SECURITYLEVEL -u USER HOSTIP OID
 # When script called
