@@ -24,21 +24,28 @@ To use this with your Icinga2 instance, you will need to:
 1. Have a functional Netbox instance.
    1. If you have this, generate an API token to be used by this script or share a token already used by another script/application.
 2. Have a functional Icinga2 instance, preferably with Icinga Director. 
-3. In Icinga Director, create the following data fields:
-   1. snmpv3_auth_alg
-   2. snmpv3_seclevel
-   3. virtual_chassis_url
-   4. snmp_check_type
-   5. snmpv3_address
-   6. snmpv3_auth_key
-   7. snmpv3_oid
-   8. snmpv3_priv_key
-   9. snmpv3_user
-   10. snmp_crit
-   11. snmp_version
-   12. snmp_warn
-   13. snmp_oid
+3. In Icinga Director, create the following data fields: 
+   1. virtual_chassis_url
+   2. snmp_check_type 
+   3. snmp_oid   
+   4. snmp_version  
 4.  In Icinga Director, create a Service Template and add those data fields above to the template. Alternatively, add those data fields to an existing Service Template you are already using. 
 5.  Create an Import Source and Sync Rule that will synchronize Icinga2 hosts with Netbox using the Netbox API. Use [this open source project from digitalocean](https://github.com/digitalocean/icingaweb2-module-netboximport) to achieve this.
 6.  For your sync rule, add the Virtual Chassis URL property highlighted in red in the following image: 
-    1.  ![sync rule ](https://github.com/austinjhunt/snmpwalkdriver-icinga2/blob/main/images/screenshot1.png?raw=true)
+![sync rule ](https://github.com/austinjhunt/snmpwalkdriver-icinga2/blob/main/images/screenshot1.png?raw=true)
+7.  Open Icinga Director > Commands, and add a new command. 
+    1.  Call it virtual-chassis-snmp-command, and give it the absolute path to the `snmpwalkdriver.py` script that you want to execute. 
+    2.  Open the `Arguments` tab for the command you are creating.
+    3.  Add the following arguments/values, replacing the red text with your own values that you use for SNMP checks against your hosts: 
+![sync rule ](https://github.com/austinjhunt/snmpwalkdriver-icinga2/blob/main/images/screenshot2.png?raw=true)
+8. Open `Icinga Director > Services > Service Apply Rules`
+   1. Create a new service apply rule
+   2. Import the template to which you added the SNMP fields above. You will specify values for these fields for this specific Service Apply Rule.
+   3. Set your "Assign where" option based on the hosts you want to execute virtual chassis checks against
+   4. For the `virtual_chassis_url` field, set the value to `$host.vars.virtual_chassis_url$` which will use the value pulled from the Netbox API Sync Rule. 
+   5. For the `snmp_check_type` field, use `virtual-chassis-netbox-compare`
+   6. For the `snmp_version` field, use `3`
+   7. For the `snmp_oid` field, use the OID that is used to check virtual chassis members for your device(s). 
+   8. Save the service apply rule. 
+9. Open `Icinga Director > Deployments > Render Config > Deploy`
+   
