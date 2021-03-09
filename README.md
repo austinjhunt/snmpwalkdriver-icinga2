@@ -27,7 +27,7 @@ To use this with your Icinga2 instance, you will need to:
 3. In Icinga Director, create the following data fields: 
    1. virtual_chassis_url
    2. snmp_check_type 
-   3. snmp_oid   
+   3. snmpv3_oid   
    4. snmp_version  
 4.  In Icinga Director, create a Service Template and add those data fields above to the template. Alternatively, add those data fields to an existing Service Template you are already using. 
 5.  Create an Import Source and Sync Rule that will synchronize Icinga2 hosts with Netbox using the Netbox API. Use [this open source project from digitalocean](https://github.com/digitalocean/icingaweb2-module-netboximport) to achieve this.
@@ -45,7 +45,7 @@ To use this with your Icinga2 instance, you will need to:
    4. For the `virtual_chassis_url` field, set the value to `$host.vars.virtual_chassis_url$` which will use the value pulled from the Netbox API Sync Rule. 
    5. For the `snmp_check_type` field, use `virtual-chassis-netbox-compare`
    6. For the `snmp_version` field, use `3`
-   7. For the `snmp_oid` field, use the OID that is used to check virtual chassis members for your device(s). 
+   7. For the `snmpv3_oid` field, use the OID that is used to check virtual chassis members for your device(s). 
    8. Save the service apply rule. 
 9. Open `Icinga Director > Deployments > Render Config > Deploy`
    
