@@ -39,7 +39,7 @@ To use this with your Icinga2 instance, you will need to:
     3.  Add the following arguments/values, replacing the red text with your own values that you use for SNMP checks against your hosts: 
 ![sync rule ](https://github.com/austinjhunt/snmpwalkdriver-icinga2/blob/main/images/screenshot2.png?raw=true)
 8. Open `Icinga Director > Services > Service Apply Rules`
-   1. Create a new service apply rule
+   1. Create a new service apply rule called `VirtualChassis`. You'll search for this name later to check if the apply rule works. 
    2. Import the template to which you added the SNMP fields above. You will specify values for these fields for this specific Service Apply Rule.
    3. Set your "Assign where" option based on the hosts you want to execute virtual chassis checks against
    4. For the `virtual_chassis_url` field, set the value to `$host.vars.virtual_chassis_url$` which will use the value pulled from the Netbox API Sync Rule. 
@@ -48,4 +48,6 @@ To use this with your Icinga2 instance, you will need to:
    7. For the `snmpv3_oid` field, use the OID that is used to check virtual chassis members for your device(s). 
    8. Save the service apply rule. 
 9. Open `Icinga Director > Deployments > Render Config > Deploy`
+10. Search for `VirtualChassis` in the global search bar of Icinga Web. If you have any hosts matching your "Assign where" criteria for your apply rule, they will show up in the results. 
+11. Verify that the Service Check is running as expected. If not, chances are you may need to modify some of the SNMP arguments you are passing. 
    
